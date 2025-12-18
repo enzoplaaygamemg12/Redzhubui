@@ -2706,67 +2706,64 @@ function redzlib:MakeWindow(Configs)
 		return Tab
 	end
 
-    function redzlib:Notify(Title, Text, Time)
-        Time = Time or 3
+    function redzlib:Notify(Config)
+        Config = Config or {}
 
-        local TweenService = game:GetService("TweenService")
-        local CoreGui = game:GetService("CoreGui")
+        local Title = Config.Title or "Notification"
+        local Text = Config.Description or ""
+        local Time = Config.Time or 3
 
         local ScreenGui = Instance.new("ScreenGui")
-        ScreenGui.Parent = CoreGui
-        ScreenGui.ResetOnSpawn = false
-        
+        ScreenGui.Name = "ReduxNotification"
+        ScreenGui.Parent = game:GetService("CoreGui")
+
         local Frame = Instance.new("Frame")
         Frame.Parent = ScreenGui
-        Frame.Size = UDim2.fromOffset(280, 90)
-        Frame.Position = UDim2.new(1, 300, 1, -120)
+        Frame.Size = UDim2.fromOffset(260, 90)
         Frame.AnchorPoint = Vector2.new(1, 1)
-        Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-        Frame.BorderSizePixel = 0
+        Frame.Position = UDim2.fromScale(1.05, 1.05)
+        Frame.BackgroundColor3 = Color3.fromRGB(15,15,15)
+        Frame.BorderColor3 = Color3.fromRGB(0,120,255)
+        Frame.BorderSizePixel = 1
 
-        Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
-
-        local Stroke = Instance.new("UIStroke", Frame)
-        Stroke.Color = Color3.fromRGB(0, 120, 255)
-        Stroke.Thickness = 1.2
+        local UICorner = Instance.new("UICorner", Frame)
+        UICorner.CornerRadius = UDim.new(0, 8)
 
         local TitleLabel = Instance.new("TextLabel")
         TitleLabel.Parent = Frame
-        TitleLabel.Size = UDim2.new(1, -14, 0, 26)
-        TitleLabel.Position = UDim2.fromOffset(7, 6)
+        TitleLabel.Size = UDim2.new(1, -12, 0, 28)
+        TitleLabel.Position = UDim2.fromOffset(6, 6)
         TitleLabel.BackgroundTransparency = 1
-        TitleLabel.Text = Title
+        TitleLabel.Text = tostring(Title)
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.TextSize = 14
-        TitleLabel.TextColor3 = Color3.fromRGB(0, 140, 255)
+        TitleLabel.TextColor3 = Color3.fromRGB(0,120,255)
         TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
         local TextLabel = Instance.new("TextLabel")
         TextLabel.Parent = Frame
-        TextLabel.Size = UDim2.new(1, -14, 0, 44)
-        TextLabel.Position = UDim2.fromOffset(7, 34)
+        TextLabel.Size = UDim2.new(1, -12, 0, 40)
+        TextLabel.Position = UDim2.fromOffset(6, 36)
         TextLabel.BackgroundTransparency = 1
-        TextLabel.Text = Text
+        TextLabel.Text = tostring(Text)
         TextLabel.Font = Enum.Font.Gotham
         TextLabel.TextSize = 12
         TextLabel.TextWrapped = true
-        TextLabel.TextColor3 = Color3.fromRGB(230, 230, 230)
+        TextLabel.TextColor3 = Color3.fromRGB(230,230,230)
         TextLabel.TextXAlignment = Enum.TextXAlignment.Left
         TextLabel.TextYAlignment = Enum.TextYAlignment.Top
-
-        -- Entrada
-        TweenService:Create(
+        
+        game:GetService("TweenService"):Create(
             Frame,
-            TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-            {Position = UDim2.new(1, -20, 1, -120)}
+            TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {Position = UDim2.fromScale(0.98, 0.95)}
         ):Play()
 
-        -- Saída
         task.delay(Time, function()
-            TweenService:Create(
+            game:GetService("TweenService"):Create(
                 Frame,
-                TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-                {Position = UDim2.new(1, 300, 1, -120)}
+                TweenInfo.new(0.35),
+                {Position = UDim2.fromScale(1.05, 1.05)}
             ):Play()
             task.wait(0.4)
             ScreenGui:Destroy()
